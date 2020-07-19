@@ -1,0 +1,20 @@
+.list-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 400px;
+  background-color: white;
+  margin-bottom: 40px;
+}
+
+.list-item {
+  padding: 10px 16px;
+  color: slategrey;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.list-item-selected {
+  background-color: cyan;
+}
