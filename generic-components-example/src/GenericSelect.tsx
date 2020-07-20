@@ -27,6 +27,10 @@ const isMultiSelect = <T extends any>(
   props: GenericSelectProps<T>
 ): props is MultiSelectProps<T> => props.kind === SelectKind.MULTI;
 
+const isSingleSelect = <T extends any>(
+  props: GenericSelectProps<T>
+): props is MultiSelectProps<T> => props.kind === SelectKind.SINGLE;
+
 const buildFunctions = <T extends any>(props: GenericSelectProps<T>) => {
   if (isMultiSelect(props)) {
     const { onSelected, selected } = props;
