@@ -11,24 +11,24 @@ with Typescript
 ---
 
 About Myself
+![ME](me.jpg)
+
+- Peter Chapman
+- Software Engineer @ QuotaPath
+- Primarily React and Typescript
+- Working with Typescript for 3 years
 
 ---
-
-Show Single Select
 
 ---
 
 ```ts
 type SingleSelectProps = {
   items: string[];
-  selected: string | null;
+  selected: string;
   onSelected: (selected: string) => void;
 };
-```
 
----
-
-```ts
 export const SingleSelect = ({
   items,
   selected,
@@ -68,8 +68,6 @@ const App = () => {
 
 ---
 
-Show Multi Select
-
 ---
 
 ```ts
@@ -78,11 +76,7 @@ type MultiSelectProps = {
   selected: string[];
   onSelected: (selected: string[]) => void;
 };
-```
 
----
-
-```ts
 export const MultiSelect = ({
   items,
   selected,
@@ -96,22 +90,6 @@ export const MultiSelect = ({
     );
 
   //...return same tsx
-};
-```
-
----
-
-```ts
-const App = () => {
-  const [multiSelected, setMultiSelected] = useState([]);
-
-  return (
-    <MultiSelect
-      items={items}
-      selected={multiSelected}
-      onSelected={setMultiSelected}
-    />
-  );
 };
 ```
 
@@ -138,7 +116,7 @@ type CombinedSelectProps = {
 ```ts
 export const CombinedSelect = (...) => {
   const _selected =
-    selected && selected !== null
+    selected
       ? [selected]
       : multiSelected
       ? multiSelected
@@ -172,24 +150,13 @@ export const CombinedSelect = (...) => {
 ```ts
 const App = () => {
   const [singleSelect, setSingleSelect] = useState("");
-
+  const [multiSelected, setMultiSelected] = useState([]);
   return (
     <CombinedSelect
       items={items}
       selected={multiSelected}
       onSelected={setMultiSelected}
     />
-  );
-};
-```
-
----
-
-```ts
-const App = () => {
-  const [multiSelected, setMultiSelected] = useState([]);
-
-  return (
     <CombinedSelect
       items={items}
       multiSelected={multiSelected}
@@ -200,8 +167,6 @@ const App = () => {
 ```
 
 ---
-
-Show not working. Little Jimmy intern
 
 ---
 
@@ -286,10 +251,6 @@ const App = () => {
 
 ---
 
-### I don't want to have to write that type guard every time.
-
----
-
 # Generics
 
 ---
@@ -305,12 +266,46 @@ type NumberBar = Bar<number> === { value: number }
 
 type StringBar = Bar<string> === { value: string }
 
-type FooBar = Bar<Foo> ===  { value: Bar }
+type FooBar = Bar<Foo> ===  { value: Foo }
+
+const FunctionFoo = <T>(data: T) => {
+  //doSomething
+}
+
+type FunctionComponent<P = {}> = {
+    (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
+    propTypes?: WeakValidationMap<P>;
+    contextTypes?: ValidationMap<any>;
+    defaultProps?: Partial<P>;
+    displayName?: string;
+}
+```
+
+---
+
+### But what about the branching functionality of the single and multi select?
+
+```ts
+const handleSelected = (clickedItem: string) => {
+  onSelected(
+    Array.isArray(selected)
+      ? selected.includes(clickedItem)
+        ? selected.filter((item) => item !== clickedItem)
+        : [...selected, clickedItem]
+      : clickedItem
+  );
+};
 ```
 
 ---
 
 # Tagged Unions
+
+---
+
+> - Types that have a common, singleton type property the discriminant.
+> - A type alias that takes the union of those types — the union.
+> - Type guards on the common property.
 
 ---
 
@@ -340,14 +335,6 @@ const GenericSelectProps = <T>(props: GenericSelectProps<T>) => {
   ///more to come
 };
 ```
-
----
-
-### How does typescript know what type props it's getting?
-
----
-
-# Type Guards
 
 ---
 
@@ -446,13 +433,11 @@ const App = () => {
 
 ---
 
-SHOW NUMBER SELECT
-
 ---
 
 ```ts
 const App = () => {
-  const [singleSelect, setSingleSelect] = useState<number | null>(null);
+  const [singleSelect, setSingleSelect] = useState<number>(null);
 
   return (
     <GenericSelect<number | null>
